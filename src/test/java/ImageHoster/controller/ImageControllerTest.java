@@ -148,7 +148,7 @@ public class ImageControllerTest {
                 .session(session))
                 .andExpect(redirectedUrl("/images"));
     }
-/*
+
     //This test checks the controller logic when the owner of the image sends the GET request to get the form to edit the image and checks whether the logic returns the html file 'images/edit.html'
     @Test
     public void editImageWithOwnerOfTheImage() throws Exception {
@@ -307,5 +307,4 @@ public class ImageControllerTest {
                 .session(session))
                 .andExpect(model().attribute("deleteError", "Only the owner of the image can delete the image"));
     }
-*/
 }
