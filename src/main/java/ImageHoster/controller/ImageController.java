@@ -3,6 +3,7 @@ package ImageHoster.controller;
 import ImageHoster.model.Image;
 import ImageHoster.model.Tag;
 import ImageHoster.model.User;
+import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class ImageController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private CommentService commentService;
+
     //This method displays all the images in the user home page after successful login
     @RequestMapping("images")
     public String getUserImages(Model model) {
@@ -50,6 +54,7 @@ public class ImageController {
         Image image = imageService.getImage(imageId);
         model.addAttribute("image", image);
         model.addAttribute("tags", image.getTags());
+        model.addAttribute("comments", commentService.getAllCommentsByImage(image));
         return "images/image";
     }
 
@@ -97,6 +102,7 @@ public class ImageController {
         User currentUser= (User) session.getAttribute("loggeduser");
         String error= "Only the owner of the image can edit the image";
         model.addAttribute("image", image);
+        model.addAttribute("comments", commentService.getAllCommentsByImage(image));
         if (currentUser.equals(image.getUser())){
             String tags = convertTagsToString(image.getTags());
             model.addAttribute("tags", tags);
@@ -157,6 +163,8 @@ public class ImageController {
             return "redirect:/images";
         } else{
             model.addAttribute("image",image);
+            model.addAttribute("comments", commentService.getAllCommentsByImage(image));
+            model.addAttribute("tags", image.getTags());
             model.addAttribute("deleteError", error);
             return  "images/image";
         }
